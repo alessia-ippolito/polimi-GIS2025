@@ -26,6 +26,7 @@ function createWMSLayer(title, layerName, style = null, visible = false) {
 
 // Layer base
 const osm = new Tile({ title: 'OpenStreetMap', type: 'base', visible: true, source: new OSM() });
+
 const baseMaps = new Group({ title: 'Base Maps', layers: [osm] });
 
 // Gruppi ordinati
@@ -73,6 +74,24 @@ const map = new Map({
   view: new View({ center: fromLonLat([10.4, 51.1]), zoom: 5 })
 });
 
+// Ensure OpenLayers recalculates size after layout/CSS is applied
+// This fixes gaps when the map was initialized before the container reached full size.
+function logMapBounds(note = '') {
+  try {
+    const el = document.getElementById('map');
+    const rect = el ? el.getBoundingClientRect() : null;
+    console.log('MAP DEBUG', note, {
+      mapElementRect: rect,
+      docClient: { w: document.documentElement.clientWidth, h: document.documentElement.clientHeight },
+      mapSize_ol: map.getSize(),
+      mapViewport: map.getViewport ? map.getViewport().getBoundingClientRect() : null
+    });
+  } catch (e) {
+    console.warn('MAP DEBUG: logging failed', e);
+  }
+}
+
+
 // Controlli
 map.addControl(new ScaleLine());
 map.addControl(new FullScreen());
@@ -87,11 +106,11 @@ const layerSwitcher = new LayerSwitcher({
   activationMode: 'click',
   startActive: false,
   tipLabel: 'Legenda',
-  groupSelectStyle: 'none'  // nessun checkbox a livello di gruppo
+  groupSelectStyle: 'none'  // no checkbox at group level
 });
 map.addControl(layerSwitcher);
 
-// Aggiungi gruppi
+// add layers to map
 [baseMaps, landCover, nox, pm25, pm10].forEach(group => map.addLayer(group));
 
 // Funzione per simulare radio-button per gruppo
@@ -108,6 +127,28 @@ function enableRadioBehavior(group) {
     });
   });
 }
+const pollutantGroups = [nox, pm25, pm10];
 
 // Abilita il comportamento "radio" solo per i gruppi desiderati
 [nox, pm25, pm10].forEach(enableRadioBehavior);
+function enableGlobalRadioBehavior(groups) {
+  groups.forEach(group => {
+    group.getLayers().forEach(layer => {
+      layer.on('change:visible', () => {
+        if (layer.getVisible()) {
+
+          groups.forEach(otherGroup => {
+            otherGroup.getLayers().forEach(otherLayer => {
+              if (otherLayer !== layer && otherLayer.getVisible()) {
+                otherLayer.setVisible(false);
+              }
+            });
+          });
+
+        }
+      });
+    });
+  });
+}
+
+enableGlobalRadioBehavior(pollutantGroups);
