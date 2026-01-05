@@ -1,6 +1,3 @@
-import 'ol/ol.css';
-import 'ol-layerswitcher/dist/ol-layerswitcher.css';
-
 import { Map, View } from 'ol';
 import { Tile as TileLayer, Image, Group, Vector as VectorLayer } from 'ol/layer';
 import { OSM, ImageWMS, Vector as VectorSource } from 'ol/source';
@@ -10,11 +7,11 @@ import LayerSwitcher from 'ol-layerswitcher';
 import { createStringXY } from 'ol/coordinate';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Fill, Stroke } from 'ol/style';
+//import { createCustomLayerSwitcher } from './customLayerSwitcher.js';
 
 // helper function for WMS
 function createWMSLayer(title, layerName, style = null, visible = false) {
-  return new Image({
-    title,
+  const layer = new Image({
     source: new ImageWMS({
       url: 'https://www.gis-geoserver.polimi.it/geoserver/gisgeoserver_01/wms',
       params: {
@@ -24,6 +21,9 @@ function createWMSLayer(title, layerName, style = null, visible = false) {
     }),
     visible
   });
+  // Ensure title property is explicitly set for ol-layerswitcher
+  layer.set('title', title);
+  return layer;
 }
 
 // Layer base
@@ -81,7 +81,7 @@ const no2BivariateLayer = new VectorLayer({
 });
 
 
-fetch("../layer/Germany_no2_2020_bivariate.geojson")
+fetch(window.DATA_PATHS.geojson)
   .then(response => {
     console.log('Response status:', response.status);
     console.log('Response ok:', response.ok);
@@ -109,7 +109,7 @@ fetch("../layer/Germany_no2_2020_bivariate.geojson")
 const nox = new Group({
   title: 'NO₂ (Nitrogen Dioxide)',
   layers: [
-    createWMSLayer('NO₂ Concentration Map 2020', 'gisgeoserver_01:GERMANY_no2_concentration_map_2020', 'LC_style'),
+    createWMSLayer('NO₂ Concentration Map 2020', 'gisgeoserver_01:GERMANY_no2_concentration_map_2020'),
     createWMSLayer('NO₂ Average 2022', 'gisgeoserver_01:GERMANY_average_no2_2022'),
     createWMSLayer('NO₂ AAD Map 2017-2021', 'gisgeoserver_01:GERMANY_no2_2017_2021_AAD_map_2022', 'GERMANY_no2_2017_2021_AAD_2022'),
     no2BivariateLayer, // Local layer bivariate NO2
@@ -123,7 +123,7 @@ const pm25 = new Group({
     createWMSLayer('PM2.5 Concentration 2020', 'gisgeoserver_01:Germany_pm2p5_concentration_2020'),
     createWMSLayer('PM2.5 Average 2022', 'gisgeoserver_01:Germany_average_pm2p5_2022'),
     createWMSLayer('PM2.5 AAD Map 2017-2021', 'gisgeoserver_01:Germany_pm2p5_2017_2021_AAD_map _2022', 'Germany_pm2p5 _2017-2021_AAD_map _2022'),
-    createWMSLayer('PM2.5 Bivariate Map 2020', 'gisgeoserver_01:Germany_pm2p5_2020_bivariate'),
+    createWMSLayer('PM2.5 Bivariate Map 2020', 'gisgeoserver_01:Germany_pm2p5_2020_bivariate' ),
     createWMSLayer('CAMS PM2.5 December 2022', 'gisgeoserver_01:Germany_CAMS_pm2p5_2022_12')
   ]
 });
@@ -158,16 +158,215 @@ map.addControl(new MousePosition({
   placeholder: '0.0000, 0.0000'
 }));
 
+[baseMaps, landCover, nox, pm25, pm10].forEach(group => map.addLayer(group));
+// Ensure each group and its child layers have titles (required by ol-layerswitcher)
+/*function ensureTitles(groups) {
+  groups.forEach(group => {
+    if (!group.get('title')) group.set('title', 'Group');
+    if (group.getLayers) {
+      group.getLayers().getArray().forEach((lyr, idx) => {
+        if (!lyr.get('title')) {
+          lyr.set('title', `Layer ${idx}`);
+        }
+      });
+    }
+  });
+}
+
+ensureTitles([baseMaps, landCover, nox, pm25, pm10]);*/
+// Guard call to optional custom layer switcher if file not provided
+if (typeof createCustomLayerSwitcher === 'function') {
+  createCustomLayerSwitcher(map);
+}
+const pollutantGroups = [nox, pm25, pm10, landCover];
+// Apply radio behaviour: only one layer per pollutant group visible at a time
+enableRadioBehavior(nox);
+enableRadioBehavior(pm25);
+enableRadioBehavior(pm10);
+// And globally among pollutant groups (only one pollutant layer visible across groups)
+enableGlobalRadioBehavior(pollutantGroups);
+
 const layerSwitcher = new LayerSwitcher({
   activationMode: 'click',
   startActive: false,
   tipLabel: 'Legenda',
-  groupSelectStyle: 'none'
+  groupSelectStyle: 'children'
+
 });
 map.addControl(layerSwitcher);
 
 
-[baseMaps, landCover, nox, pm25, pm10].forEach(group => map.addLayer(group));
+// Forza il LayerSwitcher a renderizzare dopo che tutti i layer sono stati aggiunti
+/*setTimeout(() => {
+  layerSwitcher.renderPanel();
+  map.updateSize();
+
+  // Debug: log LayerSwitcher and map/group/layer titles so we can inspect what the switcher should render
+  console.log('LayerSwitcher control:', layerSwitcher);
+  map.getLayers().getArray().forEach((g, i) => {
+    console.log(`Group ${i}:`, g.get('title'));
+    console.log('  has getLayers?', typeof g.getLayers === 'function');
+    if (g.getLayers) {
+      const childLayers = g.getLayers().getArray();
+      console.log('  child count:', childLayers.length);
+      childLayers.forEach((l, j) => {
+        console.log(`    Layer ${j}:`, l.get('title'), 'visible:', l.getVisible(), 'child? ', typeof l.getLayers === 'function');
+      });
+    }
+  });
+
+  // Also log the LayerSwitcher DOM panel HTML to check if child layers are rendered but hidden by CSS
+  const panel = document.querySelector('.layer-switcher .panel');
+  console.log('LayerSwitcher panel DOM found:', !!panel);
+  console.log('LayerSwitcher panel HTML:', panel ? panel.innerHTML : '(no panel element)');
+
+}, 500);*/
+
+// Fallback: if ol-layerswitcher doesn't render child layers, build a simple custom switcher
+setTimeout(() => {
+  const panel = document.querySelector('.layer-switcher .panel');
+  const hasOnlyGroups = panel && panel.querySelectorAll('li.layer').length && !panel.querySelector('li.group');
+  if (hasOnlyGroups) {
+    console.warn('ol-layerswitcher did not render child layers — building fallback switcher');
+    // remove the original ol-layerswitcher control and DOM to avoid duplicate UI
+    try {
+      const olSwitcherEl = document.querySelector('.layer-switcher');
+      if (olSwitcherEl) olSwitcherEl.remove();
+    } catch (e) {
+      console.warn('Could not remove ol-layerswitcher DOM element', e);
+    }
+    try { map.removeControl(layerSwitcher); } catch (e) { /* ignore */ }
+    const container = document.createElement('div');
+    container.className = 'custom-layer-switcher';
+    container.style.cssText = 'position:absolute;top:3.5em;right:0.5em;background:#fff;border:1px solid #ddd;padding:8px;border-radius:4px;max-height:60vh;overflow:auto;z-index:3002;';
+
+    const ul = document.createElement('ul');
+    ul.style.listStyle = 'none';
+    ul.style.margin = '0';
+    ul.style.padding = '0';
+
+    map.getLayers().getArray().forEach(group => {
+      const liGroup = document.createElement('li');
+      liGroup.style.marginBottom = '6px';
+      const gTitle = group.get('title') || 'Group';
+      const groupLabel = document.createElement('div');
+      groupLabel.style.fontWeight = '600';
+      groupLabel.textContent = gTitle;
+      liGroup.appendChild(groupLabel);
+
+      if (group.getLayers) {
+        const children = group.getLayers().getArray();
+        const childUl = document.createElement('ul');
+        childUl.style.listStyle = 'none';
+        childUl.style.paddingLeft = '12px';
+        children.forEach((lyr, idx) => {
+          const childLi = document.createElement('li');
+          childLi.style.margin = '4px 0';
+          const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.checked = !!lyr.getVisible();
+            cb.id = `custom-switch-${gTitle.replace(/\s+/g,'_')}-${idx}`;
+            cb.addEventListener('change', () => {
+              // If this group is in pollutantGroups, enforce radio behavior
+              const radioTitles = pollutantGroups.map(g => g.get('title'));
+              if (radioTitles.includes(gTitle)) {
+                // uncheck/disable other layers in this group
+                children.forEach((otherL, otherIdx) => {
+                  const otherId = `custom-switch-${gTitle.replace(/\s+/g,'_')}-${otherIdx}`;
+                  const otherCb = document.getElementById(otherId);
+                  if (otherIdx !== idx) {
+                    otherL.setVisible(false);
+                    if (otherCb) otherCb.checked = false;
+                  }
+                });
+                // set this one according to checkbox
+                lyr.setVisible(cb.checked);
+              } else {
+                lyr.setVisible(cb.checked);
+              }
+              // update global radio behavior across pollutant groups: if a pollutant layer became visible
+              if (lyr.getVisible()) {
+                pollutantGroups.forEach(pg => {
+                  if (pg !== group) {
+                    pg.getLayers().getArray().forEach(otherLayer => {
+                      if (otherLayer.getVisible()) otherLayer.setVisible(false);
+                    });
+                  }
+                });
+                // also uncheck checkboxes of other pollutant groups
+                pollutantGroups.forEach(pg => {
+                  const title = pg.get('title');
+                  if (title !== gTitle) {
+                    pg.getLayers().getArray().forEach((otherLayer, otherIdx) => {
+                      const otherId = `custom-switch-${title.replace(/\s+/g,'_')}-${otherIdx}`;
+                      const otherCb = document.getElementById(otherId);
+                      if (otherCb) otherCb.checked = false;
+                    });
+                  }
+                });
+              }
+            });
+          const lbl = document.createElement('label');
+          lbl.htmlFor = cb.id;
+          lbl.style.marginLeft = '6px';
+          lbl.textContent = lyr.get('title') || `Layer ${idx}`;
+          childLi.appendChild(cb);
+          childLi.appendChild(lbl);
+          childUl.appendChild(childLi);
+        });
+        liGroup.appendChild(childUl);
+      }
+
+      ul.appendChild(liGroup);
+    });
+
+    // add a close button
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.textContent = '✕';
+    closeBtn.title = 'Close';
+    closeBtn.style.cssText = 'position:absolute;top:4px;right:6px;border:none;background:transparent;font-size:14px;cursor:pointer;';
+    closeBtn.addEventListener('click', () => {
+      container.style.display = 'none';
+      // create or show reopen button
+      let reopen = document.getElementById('custom-switcher-reopen-btn');
+      if (!reopen) {
+        reopen = document.createElement('button');
+        reopen.id = 'custom-switcher-reopen-btn';
+        reopen.textContent = 'Layers';
+        reopen.title = 'Show layers';
+        reopen.style.cssText = 'position:absolute;top:3.5em;right:0.5em;background:#00087c;color:#fff;border-radius:4px;padding:6px 8px;border:none;cursor:pointer;z-index:2000;';
+        document.body.appendChild(reopen);
+      } else {
+        reopen.style.display = 'block';
+      }
+    });
+
+    container.appendChild(closeBtn);
+    container.appendChild(ul);
+    // start closed by default
+    container.style.display = 'none';
+    document.body.appendChild(container);
+
+    // create reopen button visible by default
+    let reopen = document.getElementById('custom-switcher-reopen-btn');
+    if (!reopen) {
+      reopen = document.createElement('button');
+      reopen.id = 'custom-switcher-reopen-btn';
+      reopen.textContent = 'Layers';
+      reopen.title = 'Show layers';
+      reopen.style.cssText = 'position:absolute;top:3.5em;right:0.5em;background:#00087c;color:#fff;border-radius:4px;padding:6px 8px;border:none;cursor:pointer;z-index:2000;';
+      document.body.appendChild(reopen);
+    } else {
+      reopen.style.display = 'block';
+    }
+    reopen.addEventListener('click', () => {
+      container.style.display = 'block';
+      reopen.style.display = 'none';
+    });
+  }
+}, 700);
+
 
 //  radio button for groups
 function enableRadioBehavior(group) {
@@ -183,6 +382,7 @@ function enableRadioBehavior(group) {
     });
   });
 }
+
 
 // radio global behavior across groups
 function enableGlobalRadioBehavior(groups) {
@@ -203,10 +403,6 @@ function enableGlobalRadioBehavior(groups) {
   });
 }
 
-const pollutantGroups = [nox, pm25, pm10];
-pollutantGroups.forEach(enableRadioBehavior);
-enableGlobalRadioBehavior(pollutantGroups);
-
 // Ensure map resizes properly after initial load
 setTimeout(() => {
   map.updateSize();
@@ -217,7 +413,7 @@ const legendDiv = document.createElement('div');
 legendDiv.id = 'bivariate-legend';
 legendDiv.style.cssText = `
   position: absolute;
-  bottom: 30px;
+  bottom: 40px;
   left: 10px;
   background: white;
   padding: 10px;
@@ -262,7 +458,7 @@ const aadLegendDiv = document.createElement('div');
 aadLegendDiv.id = 'aad-legend';
 aadLegendDiv.style.cssText = `
   position: absolute;
-  bottom: 30px;
+  bottom: 40px;
   left: 10px;
   background: white;
   padding: 10px;

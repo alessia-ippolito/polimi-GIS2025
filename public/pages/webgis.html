@@ -2,31 +2,67 @@
 <html lang="en">
 
 <head>
-    <base href="">
     <title>Air quality Map</title>
-
     <meta charset="utf-8">
 
-    <!--StyleSheets-->
-    <!-- <link rel="stylesheet" href="../assets/libraries/ol-v6.14.1-dist/ol.css"> -->
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- OpenLayers CSS da CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol-layerswitcher@4.1.2/dist/ol-layerswitcher.css">
 
-    <!-- Static files are imported from public folder -->
-    <link rel="stylesheet" href="../assets/css/custom-styles_map.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="../../assets/css/custom-styles_map.css">
+
+    <style>
+        body {
+        margin: 0;
+        padding: 0;
+     }
     
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+        
+    </style>
 
-    <!-- Modules are imported normally -->
-    <script type="module" src="../assets/js/map.js"></script>
+    <!-- Import maps per risolvere i moduli -->
+    <script type="importmap">
+{
+   "imports": {
+        "ol": "https://esm.sh/ol@10.3.1",
+        "ol/": "https://esm.sh/ol@10.3.1/",
+        "ol-layerswitcher": "https://esm.sh/ol-layerswitcher@4.1.2"
+    }
+}
+</script>
+</script>
+
+    <!-- Path come variabili globali -->
+    <script>
+        window.DATA_PATHS = {
+            geojson: "../layer/Germany_no2_2020_bivariate.geojson",
+            legendBivariate: "../images/pm2p5_images/legend_bivariate_5x5.png",
+            legendNo2: "../images/legend_no2.jpg",
+            legendPm25: "../images/legend_pm25.jpg",
+            legendPm10: "../images/legend_pm10.jpg"
+        };
+    </script>
+
+    <!-- JavaScript Module -->
+    <script type="module" src="../../assets/js/map.js"></script>
 </head>
 
 <body>
     <div class="w-100 vh-100">
         <div class="floating-button">
-            <a href="../index.html" class="btn btn-success">Go Home</a>
+            <a href="../../index.html" class="btn btn-success">Go Home</a>
         </div>
         <div id="map"></div>
 
-        <!--Add here the popup HTML-- the style is in custom-styles.css--> 
+        <!--Add here the popup HTML-- the style is in custom-styles.css-->
         <div id="popup" class="ol-popup">
             <a href="#" id="popup-closer" class="ol-popup-closer">
                 &times;

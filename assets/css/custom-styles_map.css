@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+
 html, body {
     margin: 0;
     padding: 0;
@@ -18,18 +19,21 @@ body {
 }
 
 /* Map container - fills entire viewport */
+/* Wrapper genitore per il div mappa */
+#wrapper {
+    width: 100%;
+    height: 100vh; /* tutta l’altezza del viewport */
+    position: relative; /* serve per posizionare #map assoluto dentro di esso */
+}
+
+/* Map container - riempie il wrapper */
 #map {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
 }
-
 /* Floating home button */
 .floating-button {
     position: absolute;
@@ -58,76 +62,12 @@ body {
     box-shadow: none !important;
 }
 
-
-/* Popup styles */
-/*
-.ol-popup {
-    position: absolute;
-    background-color: white;
-    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #cccccc;
-    bottom: 12px;
-    left: -50px;
-    min-width: 280px;
-    max-width: 400px;
-}*/
-/*
-.ol-popup:after,
-.ol-popup:before {
-    top: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-}*/
-/*
-.ol-popup:after {
-    border-top-color: white;
-    border-width: 10px;
-    left: 48px;
-    margin-left: -10px;
-}*/
-/*
-.ol-popup:before {
-    border-top-color: #cccccc;
-    border-width: 11px;
-    left: 48px;
-    margin-left: -11px;
-}*/
-/*
-.ol-popup-closer {
-    text-decoration: none;
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 24px;
-    color: #666;
-    font-weight: bold;
-    cursor: pointer;
-}*/
-/*
-.ol-popup-closer:hover {
-    color: #000;
-}
-
-#popup-content {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-#popup-content p {
-    margin: 5px 0;
-}*/
-
 /* OpenLayers controls positioning */
 .ol-zoom {
     top: 20px;
-    left: auto;
-    right: 340px;
+    left: 10px;
+    right: auto;
+    z-index: 1200;
 }
 
 .ol-attribution {
@@ -169,5 +109,26 @@ body {
 
     font-family: monospace;
     font-size: 13px;
+}
+
+/* Fallback simple layer switcher styles */
+.custom-layer-switcher ul li div {
+    font-size: 13px;
+}
+.custom-layer-switcher label {
+    font-size: 13px;
+}
+
+#custom-switcher-reopen-btn {
+    position: absolute;
+    top: 3.5em;
+    right: 0.5em;
+    background: #00087c;
+    color: #fff;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 2000;
 }
 
