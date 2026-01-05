@@ -4,220 +4,258 @@
 	GIS Lab Project 2024/25
 -->
 <html>
-	<head>
-		<title>Air Quality Mapping - GIS Lab 2024/25</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="libraries/v8.2.0-package/ol.css">
-		<script src="libraries/v8.2.0-package/dist/ol.js"></script>
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
 
-		<!-- Sidebar -->
-			<section id="sidebar">
-				<div class="inner">
-					<nav>
+<head>
+	<title>Air Quality Mapping - GIS Lab 2024/25</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="libraries/v8.2.0-package/ol.css">
+	<script src="libraries/v8.2.0-package/dist/ol.js"></script>
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+</head>
+
+<body class="is-preload">
+
+	<!-- Sidebar -->
+	<section id="sidebar">
+		<div class="inner">
+			<nav>
+				<ul>
+					<li><a href="#intro">Introduction</a></li>
+					<li><a href="#overview">Project Overview</a></li>
+					<li><a href="#pollutants">Pollutant Analysis</a></li>
+					<li><a href="#methodology">Methodology</a></li>
+					<li><a href="#webgis">WebGIS</a></li>
+					<li><a href="#team">Team</a></li>
+				</ul>
+			</nav>
+		</div>
+	</section>
+
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Intro -->
+		<section id="intro" class="wrapper style1 fullscreen fade-up" style="
+		background-image:
+		linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+		url('images/Home.jpg');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+">
+			<div class="inner">
+				<h1>Germany</h1>
+				<p>Analyzing Land Cover Correlation and Population Exposure to Air Pollutants<br />
+					<strong>Geographic Information Systems Lab Project</strong><br />
+					Academic Year 2024/25 - Politecnico di Milano
+				</p>
+				<ul class="actions">
+					<li><a href="#overview" class="button scrolly">Explore Project</a></li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- Project Overview -->
+		<section id="overview" class="wrapper style2 fade-up">
+			<div class="inner">
+				<h2>Project Overview</h2>
+				<p>This project harnesses free and open geospatial data from the Copernicus programme to study
+					historical trends of air pollutants in relation to environmental variables and evaluate exceedance
+					above recommended health guidelines. Using CAMS (Copernicus Atmosphere Monitoring Service)
+					reanalysis data from 2013-2022, we analyze the spatial distribution and temporal trends of major air
+					pollutants.</p>
+
+				<div class="row">
+					<div class="col-6 col-12-medium">
+						<h3>Data Sources</h3>
 						<ul>
-							<li><a href="#intro">Introduction</a></li>
-							<li><a href="#overview">Project Overview</a></li>
-							<li><a href="#pollutants">Pollutant Analysis</a></li>
-							<li><a href="#methodology">Methodology</a></li>
-							<li><a href="#webgis">WebGIS</a></li>
-							<li><a href="#team">Team</a></li>
+							<li><strong>CAMS European Air Quality Reanalysis</strong> - Hourly pollutant data
+								(2013-2022)</li>
+							<li><strong>ESA CCI Land Cover</strong> - Multi-temporal land cover maps</li>
+							<li><strong>WorldPop</strong> - Population count data (2020)</li>
+							<li><strong>FAO GAUL</strong> - Administrative boundaries</li>
 						</ul>
-					</nav>
+					</div>
+					<div class="col-6 col-12-medium">
+						<h3>Health Guidelines</h3>
+						<div class="table-wrapper">
+							<table class="alt">
+								<thead>
+									<tr>
+										<th>Pollutant</th>
+										<th>EU Annual Limit</th>
+										<th>WHO AQG</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>NO₂</td>
+										<td>40 μg/m³</td>
+										<td>10 μg/m³</td>
+									</tr>
+									<tr>
+										<td>PM2.5</td>
+										<td>25 μg/m³</td>
+										<td>5 μg/m³</td>
+									</tr>
+									<tr>
+										<td>PM10</td>
+										<td>40 μg/m³</td>
+										<td>15 μg/m³</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Pollutant Analysis -->
+		<section id="pollutants" class="wrapper style3 spotlights">
+			<section>
+				<a href="pages/no2.html" class="image"><img src="images/no2-map.jpg" alt="NO2 Concentration Map"
+						data-position="center center" /></a>
+				<div class="content">
+					<div class="inner">
+						<h2>Nitrogen Dioxide (NO₂)</h2>
+						<p>Primary air pollutant mainly from vehicle emissions and industrial activities. NO₂
+							contributes to respiratory problems and is a precursor to ground-level ozone formation. Our
+							analysis covers concentration patterns, land cover correlations, and population exposure
+							across the study area.</p>
+						<ul class="actions">
+							<li><a href="pages/no2.html" class="button">View NO₂ Analysis</a></li>
+						</ul>
+					</div>
 				</div>
 			</section>
+			<section>
+				<a href="pages/pm25.html" class="image"><img src="images/pm25-map.jpg" alt="PM2.5 Concentration Map"
+						data-position="top center" /></a>
+				<div class="content">
+					<div class="inner">
+						<h2>Fine Particulate Matter (PM2.5)</h2>
+						<p>Particles with diameter ≤ 2.5 micrometers that can penetrate deep into lungs and bloodstream.
+							PM2.5 is linked to cardiovascular diseases, respiratory issues, and premature mortality. We
+							analyze its distribution patterns and relationship with urban development.</p>
+						<ul class="actions">
+							<li><a href="pages/pm25.html" class="button">View PM2.5 Analysis</a></li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			<section>
+				<a href="pages/pm10.html" class="image"><img src="images/pm10-map.jpg" alt="PM10 Concentration Map"
+						data-position="25% 25%" /></a>
+				<div class="content">
+					<div class="inner">
+						<h2>Coarse Particulate Matter (PM10)</h2>
+						<p>Particles with diameter ≤ 10 micrometers from various sources including dust, pollen, and
+							combustion. PM10 affects the respiratory system and visibility. Our study examines seasonal
+							variations and correlations with different land cover types.</p>
+						<ul class="actions">
+							<li><a href="pages/pm10.html" class="button">View PM10 Analysis</a></li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</section>
 
-		<!-- Wrapper -->
-			<div id="wrapper">
-
-				<!-- Intro -->
-					<section id="intro" class="wrapper style1 fullscreen fade-up">
-						<div class="inner">
-							<h1>Germany</h1>
-							<p>Analyzing Land Cover Correlation and Population Exposure to Air Pollutants<br />
-							<strong>Geographic Information Systems Lab Project</strong><br />
-							Academic Year 2024/25 - Politecnico di Milano</p>
-							<ul class="actions">
-								<li><a href="#overview" class="button scrolly">Explore Project</a></li>
-							</ul>
-						</div>
+		<!-- Methodology -->
+		<section id="methodology" class="wrapper style2 fade-up">
+			<div class="inner">
+				<h2>Methodology</h2>
+				<p>Our analysis employs standard GIS techniques for data preprocessing, processing, and advanced
+					visualization. The workflow includes temporal aggregation, spatial analysis, and bivariate mapping
+					to reveal relationships between air quality, land cover, and population exposure.</p>
+				<div class="features">
+					<section>
+						<span class="icon solid major fa-download"></span>
+						<h3>Data Acquisition</h3>
+						<p>Downloaded CAMS NetCDF files, ESA CCI land cover maps, and WorldPop population data for the
+							study period 2013-2022.</p>
 					</section>
-
-				<!-- Project Overview -->
-					<section id="overview" class="wrapper style2 fade-up">
-						<div class="inner">
-							<h2>Project Overview</h2>
-							<p>This project harnesses free and open geospatial data from the Copernicus programme to study historical trends of air pollutants in relation to environmental variables and evaluate exceedance above recommended health guidelines. Using CAMS (Copernicus Atmosphere Monitoring Service) reanalysis data from 2013-2022, we analyze the spatial distribution and temporal trends of major air pollutants.</p>
-							
-							<div class="row">
-								<div class="col-6 col-12-medium">
-									<h3>Data Sources</h3>
-									<ul>
-										<li><strong>CAMS European Air Quality Reanalysis</strong> - Hourly pollutant data (2013-2022)</li>
-										<li><strong>ESA CCI Land Cover</strong> - Multi-temporal land cover maps</li>
-										<li><strong>WorldPop</strong> - Population count data (2020)</li>
-										<li><strong>FAO GAUL</strong> - Administrative boundaries</li>
-									</ul>
-								</div>
-								<div class="col-6 col-12-medium">
-									<h3>Health Guidelines</h3>
-									<div class="table-wrapper">
-										<table class="alt">
-											<thead>
-												<tr>
-													<th>Pollutant</th>
-													<th>EU Annual Limit</th>
-													<th>WHO AQG</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>NO₂</td>
-													<td>40 μg/m³</td>
-													<td>10 μg/m³</td>
-												</tr>
-												<tr>
-													<td>PM2.5</td>
-													<td>25 μg/m³</td>
-													<td>5 μg/m³</td>
-												</tr>
-												<tr>
-													<td>PM10</td>
-													<td>40 μg/m³</td>
-													<td>15 μg/m³</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
+					<section>
+						<span class="icon solid major fa-layer-group"></span>
+						<h3>Temporal Aggregation</h3>
+						<p>Processed hourly data to monthly and annual averages using QGIS mesh calculator and raster
+							processing tools.</p>
 					</section>
-
-				<!-- Pollutant Analysis -->
-					<section id="pollutants" class="wrapper style3 spotlights">
-						<section>
-							<a href="pages/no2.html" class="image"><img src="images/no2-map.jpg" alt="NO2 Concentration Map" data-position="center center" /></a>
-							<div class="content">
-								<div class="inner">
-									<h2>Nitrogen Dioxide (NO₂)</h2>
-									<p>Primary air pollutant mainly from vehicle emissions and industrial activities. NO₂ contributes to respiratory problems and is a precursor to ground-level ozone formation. Our analysis covers concentration patterns, land cover correlations, and population exposure across the study area.</p>
-									<ul class="actions">
-										<li><a href="pages/no2.html" class="button">View NO₂ Analysis</a></li>
-									</ul>
-								</div>
-							</div>
-						</section>
-						<section>
-							<a href="pages/pm25.html" class="image"><img src="images/pm25-map.jpg" alt="PM2.5 Concentration Map" data-position="top center" /></a>
-							<div class="content">
-								<div class="inner">
-									<h2>Fine Particulate Matter (PM2.5)</h2>
-									<p>Particles with diameter ≤ 2.5 micrometers that can penetrate deep into lungs and bloodstream. PM2.5 is linked to cardiovascular diseases, respiratory issues, and premature mortality. We analyze its distribution patterns and relationship with urban development.</p>
-									<ul class="actions">
-										<li><a href="pages/pm25.html" class="button">View PM2.5 Analysis</a></li>
-									</ul>
-								</div>
-							</div>
-						</section>
-						<section>
-							<a href="pages/pm10.html" class="image"><img src="images/pm10-map.jpg" alt="PM10 Concentration Map" data-position="25% 25%" /></a>
-							<div class="content">
-								<div class="inner">
-									<h2>Coarse Particulate Matter (PM10)</h2>
-									<p>Particles with diameter ≤ 10 micrometers from various sources including dust, pollen, and combustion. PM10 affects the respiratory system and visibility. Our study examines seasonal variations and correlations with different land cover types.</p>
-									<ul class="actions">
-										<li><a href="pages/pm10.html" class="button">View PM10 Analysis</a></li>
-									</ul>
-								</div>
-							</div>
-						</section>
+					<section>
+						<span class="icon solid major fa-map"></span>
+						<h3>Spatial Analysis</h3>
+						<p>Conducted zonal statistics, land cover reclassification, and bivariate mapping to analyze
+							pollutant-environment relationships.</p>
 					</section>
-
-				<!-- Methodology -->
-					<section id="methodology" class="wrapper style2 fade-up">
-						<div class="inner">
-							<h2>Methodology</h2>
-							<p>Our analysis employs standard GIS techniques for data preprocessing, processing, and advanced visualization. The workflow includes temporal aggregation, spatial analysis, and bivariate mapping to reveal relationships between air quality, land cover, and population exposure.</p>
-							<div class="features">
-								<section>
-									<span class="icon solid major fa-download"></span>
-									<h3>Data Acquisition</h3>
-									<p>Downloaded CAMS NetCDF files, ESA CCI land cover maps, and WorldPop population data for the study period 2013-2022.</p>
-								</section>
-								<section>
-									<span class="icon solid major fa-layer-group"></span>
-									<h3>Temporal Aggregation</h3>
-									<p>Processed hourly data to monthly and annual averages using QGIS mesh calculator and raster processing tools.</p>
-								</section>
-								<section>
-									<span class="icon solid major fa-map"></span>
-									<h3>Spatial Analysis</h3>
-									<p>Conducted zonal statistics, land cover reclassification, and bivariate mapping to analyze pollutant-environment relationships.</p>
-								</section>
-								<section>
-									<span class="icon solid major fa-users"></span>
-									<h3>Population Exposure</h3>
-									<p>Assessed population exposure to different pollutant concentration levels using health guideline classifications.</p>
-								</section>
-								<section>
-									<span class="icon solid major fa-chart-bar"></span>
-									<h3>Trend Analysis</h3>
-									<p>Analyzed 2013-2022 time series data to identify long-term trends and annual average differences from 5-year means.</p>
-								</section>
-								<section>
-									<span class="icon solid major fa-palette"></span>
-									<h3>Visualization</h3>
-									<p>Created bivariate maps, concentration classifications, and interactive charts for effective communication of results.</p>
-								</section>
-							</div>
-						</div>
+					<section>
+						<span class="icon solid major fa-users"></span>
+						<h3>Population Exposure</h3>
+						<p>Assessed population exposure to different pollutant concentration levels using health
+							guideline classifications.</p>
 					</section>
-
-				<!-- WebGIS -->
-					<section id="webgis" class="wrapper style1 fade-up">
-						<div class="inner">
-							<h2>Interactive WebGIS</h2>
-							<p>Explore our interactive web mapping application built with GeoServer and OpenLayers. The WebGIS provides dynamic visualization of pollutant concentrations, bivariate maps, and temporal analysis tools.</p>
-							
-							<div class="row">
-								<div class="col-6 col-12-medium">
-									<h3>Features</h3>
-									<ul>
-										<li>Interactive pollutant concentration maps</li>
-										<li>Bivariate mapping (pollution vs population)</li>
-										<li>Temporal slider for time series analysis</li>
-										<li>Layer switching and transparency controls</li>
-										<li>Population exposure charts</li>
-										<li>Administrative boundary overlays</li>
-									</ul>
-								</div>
-								<div class="col-6 col-12-medium">
-									<h3>Technical Stack</h3>
-									<ul>
-										<li><strong>GeoServer</strong> - Web map server</li>
-										<li><strong>OpenLayers</strong> - Interactive mapping library</li>
-										<li><strong>QGIS</strong> - Data processing and styling</li>
-										<li><strong>DataPlotly</strong> - Chart generation</li>
-									</ul>
-								</div>
-							</div>
-							
-							<ul class="actions">
-								<li><a href="pages/webgis.html" class="button primary">Launch WebGIS</a></li>
-							</ul>
-						</div>
+					<section>
+						<span class="icon solid major fa-chart-bar"></span>
+						<h3>Trend Analysis</h3>
+						<p>Analyzed 2013-2022 time series data to identify long-term trends and annual average
+							differences from 5-year means.</p>
 					</section>
+					<section>
+						<span class="icon solid major fa-palette"></span>
+						<h3>Visualization</h3>
+						<p>Created bivariate maps, concentration classifications, and interactive charts for effective
+							communication of results.</p>
+					</section>
+				</div>
+			</div>
+		</section>
 
-				<!-- Team -->
+		<!-- WebGIS -->
+		<section id="webgis" class="wrapper style1 fade-up">
+			<div class="inner">
+				<h2>Interactive WebGIS</h2>
+				<p>Explore our interactive web mapping application built with GeoServer and OpenLayers. The WebGIS
+					provides dynamic visualization of pollutant concentrations, bivariate maps, and temporal analysis
+					tools.</p>
+
+				<div class="row">
+					<div class="col-6 col-12-medium">
+						<h3>Features</h3>
+						<ul>
+							<li>Interactive pollutant concentration maps</li>
+							<li>Bivariate mapping (pollution vs population)</li>
+							<li>Temporal slider for time series analysis</li>
+							<li>Layer switching and transparency controls</li>
+							<li>Population exposure charts</li>
+							<li>Administrative boundary overlays</li>
+						</ul>
+					</div>
+					<div class="col-6 col-12-medium">
+						<h3>Technical Stack</h3>
+						<ul>
+							<li><strong>GeoServer</strong> - Web map server</li>
+							<li><strong>OpenLayers</strong> - Interactive mapping library</li>
+							<li><strong>QGIS</strong> - Data processing and styling</li>
+							<li><strong>DataPlotly</strong> - Chart generation</li>
+						</ul>
+					</div>
+				</div>
+
+				<ul class="actions">
+					<li><a href="pages/webgis.html" class="button primary">Launch WebGIS</a></li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- Team -->
 		<section id="team" class="wrapper style2 fade-up">
 			<div class="inner">
 				<h2>Research Team</h2>
-				<p>This project was developed as part of the Geographic Information Systems course at Politecnico di Milano, Academic Year 2024/25.</p>
+				<p>This project was developed as part of the Geographic Information Systems course at Politecnico di
+					Milano, Academic Year 2024/25.</p>
 				<div class="row">
 					<!-- Team Member 1 -->
 					<div class="col-4 col-12-medium">
@@ -228,12 +266,14 @@
 							<h3>Gianluca Bettoni</h3>
 							<p>Responsible for PM10 data processing and analysis throughout the project workflow.</p>
 							<ul class="icons">
-								<li><a href="mailto:gianluca.bettoni@mail.polimi.it" class="icon solids fa-envelope"  target="_blank"><span class="label">Email</span></a></li>
-								<li><a href="https://github.com/GianBetto" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+								<li><a href="mailto:gianluca.bettoni@mail.polimi.it" class="icon solids fa-envelope"
+										target="_blank"><span class="label">Email</span></a></li>
+								<li><a href="https://github.com/GianBetto" class="icon brands fa-github"
+										target="_blank"><span class="label">GitHub</span></a></li>
 							</ul>
 						</div>
 					</div>
-					
+
 					<!-- Team Member 2 -->
 					<div class="col-4 col-12-medium">
 						<div class="team-member">
@@ -243,12 +283,15 @@
 							<h3>Alessia Ippolito</h3>
 							<p>Responsible for PM2.5 data processing and analysis throughout the project workflow.</p>
 							<ul class="icons">
-								<li><a href="https://linkedin.com/in/alessia-ippolito-189418286" class="icon brands fa-linkedin-in" target="_blank"><span class="label">LinkedIn</span></a></li>
-								<li><a href="https://github.com/alessia-ippolito" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+								<li><a href="https://linkedin.com/in/alessia-ippolito-189418286"
+										class="icon brands fa-linkedin-in" target="_blank"><span
+											class="label">LinkedIn</span></a></li>
+								<li><a href="https://github.com/alessia-ippolito" class="icon brands fa-github"
+										target="_blank"><span class="label">GitHub</span></a></li>
 							</ul>
 						</div>
 					</div>
-					
+
 					<!-- Team Member 3 -->
 					<div class="col-4 col-12-medium">
 						<div class="team-member">
@@ -258,33 +301,37 @@
 							<h3>Edoardo Pessina</h3>
 							<p>Responsible for NO2 data processing and analysis throughout the project workflow.</p>
 							<ul class="icons">
-								<li><a href="https://www.linkedin.com/in/edoardo-pessina-9354537a" class="icon brands fa-linkedin-in" target="_blank"><span class="label">LinkedIn</span></a></li>
-								<li><a href="https://github.com/astroedo" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+								<li><a href="https://www.linkedin.com/in/edoardo-pessina-9354537a"
+										class="icon brands fa-linkedin-in" target="_blank"><span
+											class="label">LinkedIn</span></a></li>
+								<li><a href="https://github.com/astroedo" class="icon brands fa-github"
+										target="_blank"><span class="label">GitHub</span></a></li>
 							</ul>
 						</div>
 					</div>
 				</div>
 
-		<!-- Footer -->
-			<footer id="footer" class="wrapper style1-alt">
-				<div class="inner">
-					<ul class="menu">
-						<li>&copy; 2025 GIS Lab Project. All rights reserved.</li>
-						<li>Template: <a href="http://html5up.net">HTML5 UP</a></li>
-						<li>Data: <a href="https://atmosphere.copernicus.eu/">Copernicus CAMS</a></li>
-					</ul>
-				</div>
-			</footer>
+				<!-- Footer -->
+				<footer id="footer" class="wrapper style1-alt">
+					<div class="inner">
+						<ul class="menu">
+							<li>&copy; 2025 GIS Lab Project. All rights reserved.</li>
+							<li>Template: <a href="http://html5up.net">HTML5 UP</a></li>
+							<li>Data: <a href="https://atmosphere.copernicus.eu/">Copernicus CAMS</a></li>
+						</ul>
+					</div>
+				</footer>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/map_debug.js"></script>
+				<!-- Scripts -->
+				<script src="assets/js/jquery.min.js"></script>
+				<script src="assets/js/jquery.scrollex.min.js"></script>
+				<script src="assets/js/jquery.scrolly.min.js"></script>
+				<script src="assets/js/browser.min.js"></script>
+				<script src="assets/js/breakpoints.min.js"></script>
+				<script src="assets/js/util.js"></script>
+				<script src="assets/js/main.js"></script>
+				<script src="assets/js/map_debug.js"></script>
 
-	</body>
+</body>
+
 </html>
