@@ -4,8 +4,11 @@
   "description": "Air pollution is the presence of harmful substances in the air, including gases and particulates, that can negatively\r impact human health and the environment. The main sources of air pollution include industrial emissions, vehicle\r exhaust, burning of fossil fuels, agricultural activities, and natural events like wildfires and volcanic eruptions. These\r pollutants contribute to climate change, respiratory diseases, and environmental degradation.",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "dev": "vite",
+  "build": "vite build",
+  "build-production": "vite build",
+  "preview": "vite preview",
+  "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
