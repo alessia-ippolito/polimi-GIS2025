@@ -28,7 +28,7 @@
         
     </style>
 
-    <!-- Import maps per risolvere i moduli -->
+    <!-- Imports modules -->
     <script type="importmap">
 {
    "imports": {
@@ -40,7 +40,7 @@
 </script>
 </script>
 
-    <!-- Path come variabili globali -->
+    <!-- Paths as global variables -->
     <script>
         window.DATA_PATHS = {
             geojson: "../layer/Germany_no2_2020_bivariate.geojson",
@@ -63,7 +63,7 @@
         <div id="map"></div>
 
         <!--Add here the popup HTML-- the style is in custom-styles.css-->
-        <div id="popup" class="ol-popup">
+        <div id="popup" class="ol-popup" style="display: none;">
             <a href="#" id="popup-closer" class="ol-popup-closer">
                 &times;
             </a>
@@ -71,7 +71,7 @@
         </div>
 
         <!--Add here the legend HTML-->
-        <div id="legend" class="legend-container">
+        <div id="legend" class="legend-container" style="display: none;">
             <span class="legend-title">Legend For map</span>
             <div id="legend-content" class="legend-content">
             </div>

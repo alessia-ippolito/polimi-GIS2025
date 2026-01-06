@@ -76,6 +76,7 @@ body {
 }
 
 /* Responsive adjustments */
+/*
 @media (max-width: 768px) {
     .legend-container {
         max-width: 250px;
@@ -91,7 +92,7 @@ body {
         min-width: 200px;
         max-width: 300px;
     }
-}
+}*/
 
 .custom-control {
     position: absolute !important;

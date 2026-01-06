@@ -7,7 +7,6 @@ import LayerSwitcher from 'ol-layerswitcher';
 import { createStringXY } from 'ol/coordinate';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Style, Fill, Stroke } from 'ol/style';
-//import { createCustomLayerSwitcher } from './customLayerSwitcher.js';
 
 // helper function for WMS
 function createWMSLayer(title, layerName, style = null, visible = false) {
@@ -80,7 +79,7 @@ const no2BivariateLayer = new VectorLayer({
   visible: false  
 });
 
-
+// Load GeoJSON data for NO2 Bivariate Layer
 fetch(window.DATA_PATHS.geojson)
   .then(response => {
     console.log('Response status:', response.status);
@@ -93,15 +92,12 @@ fetch(window.DATA_PATHS.geojson)
   .then(geojsonData => {
    
     const features = new GeoJSON().readFeatures(geojsonData, {
-      dataProjection: 'EPSG:4326',  // Proiezione del file GeoJSON
-      featureProjection: 'EPSG:3857' // Proiezione della mappa
-    });
+      dataProjection: 'EPSG:4326',  // GeoJSON projection
+      featureProjection: 'EPSG:3857' // Map projection
+    }); 
     
     no2BivariateLayer.getSource().addFeatures(features);
     
-    // Zoom sull'extent del layer
-    const extent = no2BivariateLayer.getSource().getExtent();
-
   });
 
 
@@ -159,26 +155,9 @@ map.addControl(new MousePosition({
 }));
 
 [baseMaps, landCover, nox, pm25, pm10].forEach(group => map.addLayer(group));
-// Ensure each group and its child layers have titles (required by ol-layerswitcher)
-/*function ensureTitles(groups) {
-  groups.forEach(group => {
-    if (!group.get('title')) group.set('title', 'Group');
-    if (group.getLayers) {
-      group.getLayers().getArray().forEach((lyr, idx) => {
-        if (!lyr.get('title')) {
-          lyr.set('title', `Layer ${idx}`);
-        }
-      });
-    }
-  });
-}
 
-ensureTitles([baseMaps, landCover, nox, pm25, pm10]);*/
-// Guard call to optional custom layer switcher if file not provided
-if (typeof createCustomLayerSwitcher === 'function') {
-  createCustomLayerSwitcher(map);
-}
 const pollutantGroups = [nox, pm25, pm10, landCover];
+
 // Apply radio behaviour: only one layer per pollutant group visible at a time
 enableRadioBehavior(nox);
 enableRadioBehavior(pm25);
@@ -195,32 +174,6 @@ const layerSwitcher = new LayerSwitcher({
 });
 map.addControl(layerSwitcher);
 
-
-// Forza il LayerSwitcher a renderizzare dopo che tutti i layer sono stati aggiunti
-/*setTimeout(() => {
-  layerSwitcher.renderPanel();
-  map.updateSize();
-
-  // Debug: log LayerSwitcher and map/group/layer titles so we can inspect what the switcher should render
-  console.log('LayerSwitcher control:', layerSwitcher);
-  map.getLayers().getArray().forEach((g, i) => {
-    console.log(`Group ${i}:`, g.get('title'));
-    console.log('  has getLayers?', typeof g.getLayers === 'function');
-    if (g.getLayers) {
-      const childLayers = g.getLayers().getArray();
-      console.log('  child count:', childLayers.length);
-      childLayers.forEach((l, j) => {
-        console.log(`    Layer ${j}:`, l.get('title'), 'visible:', l.getVisible(), 'child? ', typeof l.getLayers === 'function');
-      });
-    }
-  });
-
-  // Also log the LayerSwitcher DOM panel HTML to check if child layers are rendered but hidden by CSS
-  const panel = document.querySelector('.layer-switcher .panel');
-  console.log('LayerSwitcher panel DOM found:', !!panel);
-  console.log('LayerSwitcher panel HTML:', panel ? panel.innerHTML : '(no panel element)');
-
-}, 500);*/
 
 // Fallback: if ol-layerswitcher doesn't render child layers, build a simple custom switcher
 setTimeout(() => {
@@ -368,7 +321,7 @@ setTimeout(() => {
 }, 700);
 
 
-//  radio button for groups
+// radio button for groups
 function enableRadioBehavior(group) {
   group.getLayers().forEach(lyr => {
     lyr.on('change:visible', () => {
@@ -382,7 +335,6 @@ function enableRadioBehavior(group) {
     });
   });
 }
-
 
 // radio global behavior across groups
 function enableGlobalRadioBehavior(groups) {

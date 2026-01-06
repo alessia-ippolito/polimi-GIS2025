@@ -29,16 +29,19 @@ This project harnesses free and open geospatial data from the Copernicus program
 
 ```
 ├── index.html                 # Main landing page
-├── pages/                     # Individual pollutant analysis pages
-│   ├── no2.html              # Nitrogen Dioxide analysis
-│   ├── pm25.html             # PM2.5 analysis
-│   ├── pm10.html             # PM10 analysis
-│   └── webgis.html           # Interactive WebGIS application
-├── assets/                    # Static assets
-    ├── css/                  # Stylesheets
-    ├── js/                   # JavaScript files
-    └── images/               # Images and visualizations
-
+├── public/                    # Built or served static site
+│   ├── pages/                 # Individual pollutant analysis pages
+|   |   ├── webgis/            # Interactive WebGIS application (entry: index.html)
+│   │   ├── no2.html           # Nitrogen Dioxide analysis
+│   │   ├── pm25.html          # PM2.5 analysis
+│   │   └── pm10.html          # PM10 analysis
+│   ├── layer/                 # GeoJSON and vector layers (served)
+│   |── data/                  # Data and assets served with the site
+|   └── images/                # Images and visualizations
+├── assets/                    # Source static assets
+│   ├── css/                   # Stylesheets (custom + vendor overrides)
+│   ├── js/                    # JavaScript modules
+└── README.md
 ```
 ## Data Sources
 
